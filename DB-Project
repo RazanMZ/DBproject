@@ -1,0 +1,69 @@
+--DDL create
+
+CREATE DATABASE store
+use store;
+
+CREATE TABLE countries(
+country_code  int primary key  NOT NULL ,
+country_name VARCHAR(20) UNIQUE ,
+continent_name varchar(20) not null
+);
+
+create table users(
+user_id int primary key not null,
+full_name varchar(20),
+email varchar(20) unique,
+gender char(1) check (gender='f' or gender='m'),
+DoB varchar(15),
+created_at datetime,
+country_code int not null,
+foreign key( country_code) REFERENCES countries(country_code)
+);
+
+CREATE TABLE orders(
+order_id int primary key not null,
+user_id int not null,
+foreign key (user_id) references users(user_id),
+order_status varchar(6) check (order_status='start' or order_status='finish'),
+created_at datetime
+);
+
+create table order_products(
+order_id int not null,
+product_id int not null,
+ quantity int,
+ primary key (order_id,product_id),
+ foreign key (order_id) references orders(order_id),
+foreign key (product_id) references products(product_id)
+);
+insert into order_products(quantity)
+values(0);
+
+create table products(
+product_id int primary key not null,
+product_name varchar(10) not null,
+product_price int,
+product_status varchar(10) check(product_status='valid' or product_status='expired'),
+created_at datetime
+);
+insert into product(product_price)
+value(0);
+
+
+--DML -insert - update
+insert into countries(country_code,country_name,continent_name)
+values(142,'razan','europe');
+
+insert into users(country_code,user_id,full_name,email,gender,DoB)
+value (142,3,'raza','razanalmazyad@gmail.com','f',1998);
+
+insert into orders (order_id,user_id,order_status,created_at)
+values (1,3,'star',3);
+
+insert into order_product(order_id,product_id)
+values (1,7);
+
+update countries set name='muneera' where id='4';
+
+delete from products where id='3';
+
